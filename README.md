@@ -20,6 +20,7 @@
 
 키오스크 
 -방문 확인(예약 10분전부터 예약승인 된것만 가능,예약시간보다 10분 이후에 오면 방문확인 불가, 본인확인은 이름과 핸드폰번호로)
+
 ----------------------------
 환경
 JDK 17
@@ -27,11 +28,13 @@ JDK 17
 그래들
 mysql
 jpa
+
 ----------------------------
 사용 기술
 lombok
 jpa
 spring-security
+
 ----------------------------
 테이블 -USER, STORE, RESERVATION
 
@@ -68,22 +71,25 @@ RESERVATION -예약 정보 테이블 -예약 하나당 테이블 1줄 차지. �
 -APPROVED BIT (승인 여부. 해당 상점 점장이 승인 가능)
 -VISITED BIT (방문확인 여부. 예약시간 10분전부터 예약시간 10분후까지만 가능)
 -REVIEW VARCHAR (리뷰. 방문확인 처리후에만 작성 가능)
+
 --------------------------------------------------
 컨트롤러, 서비스 설계
 컨트롤러는 권한 단위로 묶음
-CustommerController
-KioskController
-MainController  (로그인하기전 페이지인 로그인,회원가입 등을 담당)
+
+CustommerController|
+KioskController|
+MainController  (로그인하기전 페이지인 로그인,회원가입 등을 담당)|
 ManagerController 
 
 뷰도 권한 단위로 묶음
-templates.common
-templates.customer
-templates.kiosk
+
+templates.common|
+templates.customer|
+templates.kiosk|
 templates.manager
 
 
 서비스는 기능(또는 테이블) 단위로 묶음
-ReservService
-StoreService
+ReservService|
+StoreService|
 UserService
