@@ -1,0 +1,32 @@
+server:
+  port: 8081
+  servelet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+      
+spring:
+  devtools:
+    livereload:
+      enabled: true
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+    check-template-location: true
+    encoding: UTF-8 
+    
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yeyak?serverTimezone=Asia/Seoul
+    username: root
+    password: 1704
+  jpa:
+    hibernate:
+#      ddl-auto: create #프로그램 재시작시 테이블 비우고 다시 생성
+    properties:
+      hibernate:
+        show_sql : true
+        format_sql: true
+        

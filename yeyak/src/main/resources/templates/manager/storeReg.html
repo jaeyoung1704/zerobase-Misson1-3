@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default_layout}">
+<head>
+<title>상점 등록 페이지</title>
+<meta charset="UTF-8">
+</head>
+<div th:insert="~{@{fragments/header}}"></div>
+<body>
+	<!-- 네비바-->
+	<div th:insert="~{@{manager/fragments/navbar}}"></div>
+	<br>
+	<div class="card start-50 translate-middle-x" style="width: 20rem;">
+		<div class="card-body">
+			<h4 class="card-title">상점 등록</h4>
+			<br>
+			<form action="/manager/storeReg" method="post" id="storeForm">
+				<label for="name" class="form-label">상점명</label>
+				<input name="name" id="name" class="form-control w-50">
+				<label for="description" class="form-label">상점 설명</label>
+				<textarea name="description" id="description" class="form-control" rows="2"
+					style="resize: none;"></textarea>
+				<br>
+				<label for="address1" class="form-label"> 도로명 주소</label>
+				<input class="form-control" id="address1" name="address1">
+				<label for="address2" class="form-label"> 상세 주소</label>
+				<input class="form-control" id="address2" name="address2">
+				<br>
+				---------------------------------------------------------
+				<br>
+				매장 관리리용 키오스크에 쓸 핀번호 4자리를 입력해주세요
+				<br>
+
+				<label for="kioskPw" class="form-label"> 패스워드</label>
+				<input type="text" class="form-control w-25" id="pin" name="pin"
+					maxlength="4" onkeyup="numberCheck(this)">
+				<br>
+				<input type="button" class="btn btn-success btn-lg mb-1"
+					onclick="register();" value="등록">
+				<input type="button" class="btn btn-danger btn-lg" onclick="history.back();"
+					value="뒤로가기" style="float: right;">
+			</form>
+		</div>
+	</div>
+	<div th:insert="~{@{fragments/footer}}"></div>
+	<script>
+		// 데이터 검증후 전송
+		function register() {
+			var form = $('#storeForm');
+			var name = $('#name').val();
+			var description = $('#description').val();
+			var address1 = $('#address1').val();
+			var address2 = $('#address2').val();
+			var pin = $('#pin').val();
+			if (!name || !description || !address1 || !address2 || !pin) {
+				alert("빈칸을 모두 입력해 주세요");
+				return;
+			}
+			if (pin.length != 4) {
+				alert("핀번호는 4자리로 입력해 주세요");
+				return;
+			}
+
+			form.submit();
+		}
+
+		//숫자만 입력
+		function numberCheck(input) {
+			input.value = input.value.replace(/[^0-9]/g, "");
+		}
+	</script>
+
+
+</body>
+</html>

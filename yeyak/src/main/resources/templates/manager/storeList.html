@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default_layout}">
+<head>
+<title>가게 리스트</title>
+<meta charset="UTF-8">
+</head>
+<div th:insert="~{@{fragments/header}}"></div>
+<body>
+	<!-- 네비바-->
+	<div th:insert="~{@{manager/fragments/navbar}}"></div>
+	<br>
+	<!--상점목록 테이블-->
+	<table class="table table-light table-bordered table-striped border border-3"
+		style="width: auto;">
+		<thead class="fs-4">
+			<tr>
+				<th>상점명</th>
+				<th>상점 설명</th>
+				<th>키오스크 아이디</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="store : ${storeList}" class="fs-5">
+				<td th:text=${store.name}></td>
+				<td th:text=${store.description}></td>
+				<td th:text="'kio'+${store.storeNo}"></td>
+			</tr>
+		</tbody>
+	</table>
+	<div th:insert="~{@{fragments/footer}}"></div>
+</body>
+</html>

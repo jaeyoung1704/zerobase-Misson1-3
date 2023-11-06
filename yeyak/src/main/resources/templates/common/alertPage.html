@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default_layout}">
+<head>
+<title>에러 페이지</title>
+<!-- Customer 스타일 추가 -->
+</head>
+<body>
+	<script th:inline="javascript">
+		var message=[[${message}]];
+		var url=[[${url}]];
+		alert(message);
+		location.href=url;
+	</script>
+</body>
+</html>

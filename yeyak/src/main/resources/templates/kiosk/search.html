@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default_layout}">
+<head>
+<title>가게 리스트</title>
+<meta charset="UTF-8">
+</head>
+<div th:insert="~{@{fragments/header}}"></div>
+<body>
+	<!-- 네비바-->
+	<div th:insert="~{@{kiosk/fragments/navbar}}"></div>
+	<br>
+	<!-- 검색창 -->
+	<h3>본인 확인을 위해 이름과 핸드폰번호를 입력해주세요</h3>
+	<form action="" style="width: 17rem;">
+		<div class="mb-3 row">
+			<label for="name" class="form-label col-sm-4 col-form-label">이름</label>
+			<div class="col-sm-4">
+				<input type="search" class="form-control" id="name" name="name">
+			</div>
+		</div>
+		<div class="mb-3 row">
+			<label for="phone" class="form-label col-sm-4 col-form-label">핸드폰 번호</label>
+			<div class="col-sm-7">
+				<input type="search" class="form-control" id="phone" name="phone"
+					oninput="hypenTel(this)" maxlength=13>
+			</div>
+		</div>
+		<button class="btn btn-outline-success" type="submit">조회</button>
+	</form>
+	<br>
+	<!--예약목록 테이블 -->
+	<div id="clock" class="nav-item fs-3" th:text="'현재시간 : '+${#calendars.format(#calendars.createNow(),'MM월 dd일 HH:mm:ss')}">clock</div>
+	<h3>조회 성공시 방문확인을 위해 방문확인 여부칸 클릭! (예약시간10분전부터 10분후까지 가능)</h3>
+	<table
+		class=" table table-light
+		table-bordered table-striped border border-3"
+		style="width: auto;">
+		<thead class="fs-4">
+			<tr>
+				<th>상점명</th>
+				<th>예약 시간</th>
+				<th>요청사항</th>
+				<th>예약한 사람</th>
+				<th>승인 여부</th>
+				<th>방문확인 여부</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="reserv: ${reservList}" class="fs-5">
+				<td th:text=${reserv.store.name}></td>
+				<td th:text="${#temporals.format(reserv.reservDt,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td th:text=${reserv.message}></td>
+				<td th:text=${reserv.user.name}></td>
+				<td th:text=${reserv.approval}></td>
+				<td th:text=${reserv.visited} th:no="${reserv.reservNo}"
+					th:onclick="visited(this.getAttribute('no'))"></td>
+			</tr>
+		</tbody>
+	</table>
+	<div th:insert="~{@{fragments/footer}}"></div>
+
+	<script>
+		//전달받은 예약번호와 승인여부를 post방식으로 전송을 위해 동적으로 form 생성 후 submit 
+		function visited(reservNo) {
+			var name = "[[${name}]]";
+			var phone = "[[${phone}]]";
+			
+			var form = document.createElement("form");
+			form.setAttribute("charset", "UTF-8");
+			form.setAttribute("method", "Post");
+			form.setAttribute("action", "/kiosk/visit");
+
+			var f1 = document.createElement("input");
+			f1.setAttribute("type", "hidden");
+			f1.setAttribute("name", "name");
+			f1.setAttribute("value", name);
+			form.appendChild(f1);
+
+			var f2 = document.createElement("input");
+			f2.setAttribute("type", "hidden");
+			f2.setAttribute("name", "phone");
+			f2.setAttribute("value", phone);
+			form.appendChild(f2);
+			
+			var f3 = document.createElement("input");
+			f3.setAttribute("type", "hidden");
+			f3.setAttribute("name", "reservNo");
+			f3.setAttribute("value", reservNo);
+			form.appendChild(f3);
+			document.body.appendChild(form);
+			form.submit();
+		}
+		
+		//연락처 주소 '-' 자동 삽입
+		const hypenTel = (target) => {
+			 target.value = target.value
+			   .replace(/[^0-9]/g, '')
+			   .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+			}
+	</script>
+</body>
+</html>

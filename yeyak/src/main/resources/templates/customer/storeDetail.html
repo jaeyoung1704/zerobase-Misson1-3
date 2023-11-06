@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default_layout}">
+<head>
+<title>가게 상세 정보</title>
+<meta charset="UTF-8">
+</head>
+<div th:insert="~{@{fragments/header}}"></div>
+<body>
+	<!-- 네비바-->
+	<div th:insert="~{@{customer/fragments/navbar}}"></div>
+	<br>
+	<div class="d-flex justify-content-center">
+		<div class="card float-start me-2" style="height: 32rem; width: 20rem;">
+			<div class="card-body" style="height: 5rem">
+				<h5 class="card-title" th:text=${store.name}>Card title</h5>
+				<p class="card-text" th:text=${store.description}>Card body</p>
+			</div>
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item" th:text=${store.address1}>An item</li>
+				<li class="list-group-item" th:text=${store.address2}>A second item</li>
+			</ul>
+			<div class="card-body gap-3" style="height: 15rem">
+				<form action="/customer/reservDo" method="get" id="reservForm">
+					<label for="reservDt" class="form-label">예약 시간</label>
+					<input type="datetime-local" name="reservDt" id="reservDt"
+						class="form-control">
+					<input type="hidden" name="storeNo" th:value=${store.storeNo}>
+					<br>
+					<label for="message" class="form-label"> 요청사항</label>
+					<textarea class="form-control" id="message" name="message" rows="2"
+						style="resize: none;"></textarea>
+					<br>
+					<input type="button" class="btn btn-success" onclick="reserv();"
+						value="방문예약하기">
+					<input type="button" class="btn btn-danger" onclick="history.back();"
+						value="뒤로가기" style="float: right;">
+				</form>
+			</div>
+		</div>
+		<div class="card float-end ms-2" style="width: 40rem;">
+			<div class="card-header">리뷰</div>
+			<ul th:each="review :${reviewList}"
+				class="list-group list-group-flush list-group-horizontal d-flex">
+				<li th:text="${review.review}"
+					class="list-group-item flex-shrink-1 flex-grow-1 float-end">리뷰한개가 얼마나
+					길어질수있을까 이렇게 써도 되는걸까123123 리뷰길이 테스트</li>
+				<li th:text="${review.user.id}" style="width: 6rem">사람이름</li>
+			</ul>
+			<!-- <div class="card-body d-flex align-items-end justify-content-center">
+				<nav aria-label="Page navigation example">
+					<ul class="pagination justify-content-center">
+						<li class="page-item disabled"><a class="page-link" href="#"
+							tabindex="-1" aria-disabled="true">Previous</a></li>
+						<li class="page-item active"><a class="page-link" href="#">1</a></li>
+						<li class="page-item"><a class="page-link"
+							th:href="@{/customer/store/{storeNo}?page=2(storeNo=${storeNo})}">2</a></li>
+						<li class="page-item"><a class="page-link" href="#">3</a></li>
+						<li class="page-item"><a class="page-link" href="#">Next</a></li>
+					</ul>
+				</nav>
+			</div> -->
+		</div>
+	</div>
+	<div th:insert="~{@{fragments/footer}}"></div>
+	<script>
+		//예약 확인후 전송
+		function reserv() {
+			var form = $('#reservForm');
+			var reservDt = $('#reservDt');
+			var message = $('#message').val();
+			if (reservDt.val() > reservDt.attr("max")) {
+				alert("현재보다 일주일 이후로는 예약할 수 없습니다");
+				return;
+			}
+			if (reservDt.val() < reservDt.attr("min")) {
+				alert("현재시간 이전으로는 예약할 수 없습니다");
+				return;
+			}
+			form.submit();
+		}
+		//예약시간 min,max 설정
+		var reservDt = $('#reservDt');
+
+		var min = new Date(Date.now() + 9 * 3600000);
+		var max = new Date(Date.now() + 9 * 3600000);
+		//Date 객체는 overflow 자동 계산됨, 최대 7일이상의 예약은은 불가능
+		max.setDate(max.getDate() + 7);
+		reservDt.attr("min", min.toISOString().substring(0, 16));
+		reservDt.attr("max", max.toISOString().substring(0, 16));
+		reservDt.val(min.toISOString().substring(0, 16));
+	</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default_layout}">
+<head>
+<title>가게 리스트</title>
+<meta charset="UTF-8">
+</head>
+<div th:insert="~{@{fragments/header}}"></div>
+<body>
+	<!-- 네비바-->
+	<div th:insert="~{@{customer/fragments/navbar}}"></div>
+	<br>
+	<h3>방문 확인이 완료된 예약은 클릭하여 리뷰를 남길수 있습니다</h3>
+	<!--예약 목록 테이블 -->
+	<table class="table table-light table-bordered table-striped border border-3">
+		<thead class="fs-4">
+			<tr>
+				<th>상점명</th>
+				<th>예약 시간</th>
+				<th>요청사항</th>
+				<th>승인 여부</th>
+				<th>방문 여부</th>
+				<th>리뷰</th>
+			</tr>
+		</thead>
+		<tbody id="tbody">
+			<tr th:each="reserv : ${reservList}" th:no=${reserv.reservNo}
+				th:visited=${reserv.visited} onclick="noToModal(this.getAttribute('no'))">
+				<td class="fs-6" th:text=${reserv.store.name}></td>
+				<td class="fs-6"
+					th:text="${#temporals.format(reserv.reservDt,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td class="fs-6" th:text=${reserv.message}></td>
+				<td class="fs-6" th:text=${reserv.approval}></td>
+				<td class="fs-6" th:text=${reserv.visited}></td>
+				<td class="fs-6" th:text=${reserv.review}></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">리뷰 남기기</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<form action="reservReview" method="post">
+					<div class="modal-body">
+						<textarea name="review" rows="2" class="form-controll w-100"></textarea>
+						<input type="hidden" name="reservNo" id="reservNo">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+						<button type="submit" class="btn btn-primary">리뷰 입력</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script>
+		//방문 완료한 예약만 리뷰 남기기 가능
+		$(document).ready(function() {
+			var trs = $('tbody').children().get();
+			console.log(trs);
+			trs.forEach(function(tr) {
+				if (tr.getAttribute("visited") == "true") {
+					console.log("true");
+					tr.setAttribute("data-bs-toggle", "modal");
+					tr.setAttribute("data-bs-target", "#exampleModal");
+				}
+			})
+		})
+
+		function noToModal(no) {
+			$('#reservNo').val(no);
+		}
+	</script>
+
+
+	<div th:insert="~{@{fragments/footer}}"></div>
+</body>
+</html>

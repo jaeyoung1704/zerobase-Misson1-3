@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default_layout}">
+<div th:insert="~{@{fragments/header}}"></div>
+<body>
+	<h2 class="contentBoxTitle fw-bold">방문예약 서비스</h2>
+	<!-- 네비바 시작 -->
+	<nav class="navbar navbar-expand-lg navbar-light"
+		style="background-color: #e3f2fd;">
+		<div class="container-fluid">
+			<a class="navbar-brand fs-3 text-success fw-bold" href="/customer/">사용자 홈</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav fs-5">
+					<li class="nav-item"><a class="nav-link active fs-4 fw-bold"
+						href="/customer/store">매장 검색</a></li>
+					<li class="nav-item"><a class="nav-link active fs-4 fw-bold"
+						href="/customer/reserv">내 예약 조회</a></li>
+					<li class="nav-item"><a class="nav-link fs-4 fw-bold" href="/logout">로그아웃</a></li>
+					<!--<li class="nav-item"><a class="nav-link" href="#"></a></li>
+					 <li class="nav-item"><a class="nav-link disabled" href="#"
+						tabindex="-1" aria-disabled="true">Disabled</a></li> -->
+				</ul>
+			</div>
+
+			<!-- 세션에서 로그인 아이디 받아와서 뿌리기-->
+			<div id="navbarName" th:text="${session.loginUser.id}+'님 환영합니다!'"
+				class="fs-4">이름</div>
+
+		</div>
+	</nav>
+	<!-- 네비바 끝 -->
+	<div th:insert="~{@{fragments/footer}}"></div>
+	<script type="text/javascript">
+		
+	</script>
+</body>
+</html>

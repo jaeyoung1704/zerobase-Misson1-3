@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default_layout}">
+<head>
+<title>가게 리스트</title>
+<meta charset="UTF-8">
+</head>
+<div th:insert="~{@{fragments/header}}"></div>
+<body>
+	<!-- 네비바-->
+	<div th:insert="~{@{manager/fragments/navbar}}"></div>
+	<br>
+	<!--예약목록 테이블 -->
+	<!-- 승인여부 칸을 클릭하면 해당 예약의 승인 여부가 토글됩니다 -->
+	<h3 class="text-center">예약 승인을 위해 승인 여부칸 클릭!</h3>
+	<table
+		class=" table table-light
+		table-bordered table-striped border border-3"
+		style="width: auto;">
+		<thead class="fs-4">
+			<tr>
+				<th>상점명</th>
+				<th>예약 시간</th>
+				<th>요청사항</th>
+				<th>예약한 사람</th>
+				<th>승인 여부</th>
+				<th>방문확인 여부</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="reserv,index : ${reservList}" class="fs-5">
+				<td th:text=${reserv.store.name}></td>
+				<td th:text="${#temporals.format(reserv.reservDt,'yyyy-MM-dd HH:mm:ss')}"></td>
+				<td th:text=${reserv.message}></td>
+				<td th:text=${reserv.user.name}></td>
+				<!-- 해당 예약의 예약번호를 no 변수에 저장, 승인여부를bool변수에 저장 후 approve 함수에 매개변수로 담아서 전달 -->
+				<td th:text=${reserv.approval} th:no="${reserv.reservNo}"
+					th:bool=${reserv.approval}
+					th:onclick="approve(this.getAttribute('no'), this.getAttribute('bool'))"></td>
+				<td th:text=${reserv.visited}></td>
+			</tr>
+		</tbody>
+	</table>
+	<div th:insert="~{@{fragments/footer}}"></div>
+
+	<script>
+		//전달받은 예약번호와 승인여부를 post방식으로 전송을 위해 동적으로 form 생성 후 submit 
+		function approve(reservNo, val) {
+			if (val == 'DENIED' || val == 'CHECKING')
+				val = "APPROVED";
+			else
+				val = 'DENIED';
+			console.log(reservNo + " " + val);
+			var form = document.createElement("form");
+			form.setAttribute("charset", "UTF-8");
+			form.setAttribute("method", "Post");
+			form.setAttribute("action", "/manager/reserv/approve");
+
+			var f1 = document.createElement("input");
+			f1.setAttribute("type", "hidden");
+			f1.setAttribute("name", "reservNo");
+			f1.setAttribute("value", reservNo);
+			form.appendChild(f1);
+
+			var f2 = document.createElement("input");
+			f2.setAttribute("type", "hidden");
+			f2.setAttribute("name", "approval");
+			f2.setAttribute("value", val);
+			form.appendChild(f2);
+
+			document.body.appendChild(form);
+			form.submit();
+		}
+	</script>
+</body>
+</html>

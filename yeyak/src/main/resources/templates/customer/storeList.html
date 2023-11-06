@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default_layout}">
+<head>
+<title>가게 리스트</title>
+<meta charset="UTF-8">
+</head>
+<div th:insert="~{@{fragments/header}}"></div>
+<body>
+	<!-- 네비바-->
+	<div th:insert="~{@{customer/fragments/navbar}}"></div>
+	<br>
+	<!-- 검색창 -->
+	<form action="">
+		<label for="name" class="form-text">상점명으로 검색</label>
+		<div class="d-flex">
+			<input class="form-control me-2 w-25" name="name" id="name" type="search"
+				placeholder="검색" aria-label="Search">
+			<button class="btn btn-outline-success" type="submit">조회</button>
+		</div>
+	</form>
+	<br>
+	<!--상점목록 테이블. 여기서는 상점명과 설명만 보여주고 클릭해서 상세보기에 나머지 정보 조회가능 -->
+	<table class="table table-light table-bordered table-striped border border-3"
+		style="width: auto;">
+		<thead class="fs-4">
+			<tr>
+				<th>상점명</th>
+				<th>상점 설명</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="store : ${storeList}" class="fs-5"
+				th:onclick="location.href='/customer/store/'+[[${store.storeNo}]]">
+				<td th:text=${store.name}></td>
+				<td th:text=${store.description}></td>
+			</tr>
+		</tbody>
+	</table>
+	<div th:insert="~{@{fragments/footer}}"></div>
+</body>
+</html>
